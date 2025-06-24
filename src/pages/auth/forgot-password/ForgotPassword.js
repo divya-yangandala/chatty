@@ -1,18 +1,43 @@
-import React from 'react';
 import './ForgotPassword.scss';
-import '../login/Login.scss';
 import { Link } from 'react-router-dom';
 import Input from '../../../components/input/Input';
 import Button from '../../../components/button/Button';
 import { FaArrowLeft } from 'react-icons/fa';
 import backgroundImage from '../../../assets/images/background.jpg';
+import { useState } from 'react';
+import { authService } from '../../../services/api/auth/auth.service';
+
 
 const ForgotPassword = () => {
+  const [email, setEmail] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertType, setAlertType] = useState('');
+  const [responseMessage, setResponseMessage] = useState('');
+
+  const forgotPassword = async (event) => {
+    setLoading(true);
+    event.preventDefault();
+    try {
+      const response = await authService.forgotPassword(email);
+      setAlertType('alert-success');
+      setLoading(false);
+      setEmail('');
+      setShowAlert(false);
+      setResponseMessage(response?.data?.message);
+    } catch (error) {
+      setAlertType('alert-error');
+      setShowAlert(true);
+      setLoading(false);
+      setResponseMessage(error?.response?.data?.message);
+    }
+  }
+
   return (
     <div className="container-wrapper" style={{ backgroundImage: `url(${backgroundImage})` }}>
       <div className="environment">DEV</div>
       <div className="container-wrapper-auth">
-        <div className="tabs forgot-password-tabs">
+        <div className="tabs forgot-password-tabs" style={{ height: `${responseMessage ? '300px' : ''}` }}>
           <div className="tabs-auth">
             <ul className="tab-group">
               <li className="tab">
@@ -22,24 +47,27 @@ const ForgotPassword = () => {
 
             <div className="tab-item">
               <div className="auth-inner">
-                {/* <div className="alerts alert-error" role="alert">
-                      Error message
-                    </div> */}
-                <form className="auth-form">
+                { responseMessage && (
+                  <div className={`alerts ${alertType}`} role="alert">
+                    {responseMessage}
+                  </div>
+                ) }
+                <form className="auth-form" onSubmit={forgotPassword}>
                   <div className="form-input-container">
                     {/* username field */}
                     <Input
-                      id="username"
-                      name="username"
+                      id="email"
+                      name="email"
                       type="text"
-                      value="my value"
-                      labelText="Username"
-                      placeHolder="Enter Username"
-                      handleChange={() => {}}
+                      value={email}
+                      labelText="Email"
+                      placeHolder="Enter Email"
+                      style={{ border: `${showAlert ? '1px solid #fa9b8a' : ''}` }}
+                      handleChange={(event) => setEmail(event.target.value)}
                     />
                   </div>
                   {/* button component */}
-                  <Button label={'FORGOT PASSWORD'} className="auth-button button" disabled={true} />
+                  <Button label={loading ? 'FORGOT PASSWORD IN PROGRESS...' : 'FORGOT PASSWORD'} className="auth-button button" disabled={loading || !email} />
                   <Link to={'/'}>
                     <span className="forgot-password">
                       <FaArrowLeft className="arrow-left" />
