@@ -1,11 +1,14 @@
-import Input from '../../../components/input/Input';
-import Button from '../../../components/button/Button';
+import Input from '@components/input/Input';
+import Button from '@components/button/Button';
 import { FaArrowRight } from 'react-icons/fa';
-import './Login.scss';
-import { Link } from 'react-router-dom';
+import '@pages/auth/login/Login.scss';
+import { Link, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import { authService } from '../../../services/api/auth/auth.service';
-
+import { authService } from '@services/api/auth/auth.service';
+import useLocalStorage from '@hooks/useLocalStorage';
+import { Utils } from '@services/utils/utils.service';
+import useSessionStorage from '@hooks/useSessionStorage';
+import { useDispatch } from 'react-redux';
 
 const Login = () => {
 
@@ -17,6 +20,11 @@ const Login = () => {
   const [alertType, setAlertType] = useState('');
   const [hasError, setHasError] = useState(false);
   const [user, setUser] = useState();
+  const [setStoredUsername] = useLocalStorage('username', 'set');
+  const [setLoggedIn] = useLocalStorage('keepLoggedIn', 'set');
+  const [pageReload] = useSessionStorage('pageReload', 'set');
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const loginUser = async (event) => {
     setLoading(true);
@@ -27,10 +35,13 @@ const Login = () => {
         password
       });
       // 1 - set logged in to true in local storage
+      setLoggedIn(keepLoggedIn);
       // 2 - set username in local storage
+      setStoredUsername(username);
       // 3 - dispatch user to redux
+      Utils.dispatchUser(result, pageReload, dispatch, setUser);
       setLoading(false);
-      setUser(result.data.user);
+      // setUser(result.data.user);
       setHasError(false);
       setAlertType('alert-success');
     } catch (error) {
@@ -46,10 +57,11 @@ const Login = () => {
     if (loading && !user) return;
     if (user) {
       // navigate to first page
+      navigate('/app/social/streams');
       console.log('navigate to streams page from Login page');
       setLoading(false);
     }
-  }, [loading, user]);
+  }, [loading, user, navigate]);
 
   return (
     <div className="auth-inner">

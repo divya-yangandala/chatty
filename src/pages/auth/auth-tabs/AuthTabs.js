@@ -1,8 +1,8 @@
 /* eslint-disable */
 import { useState } from 'react';
-import './AuthTabs.scss';
-import backgroundImage from '../../../assets/images/background.jpg';
-import { Login, Register } from '../index.js';
+import '@pages/auth/auth-tabs/AuthTabs.scss';
+import backgroundImage from '@assets/images/background.jpg';
+import { Login, Register } from '@pages/auth/index.js';
 
 
 const AuthTabs = () => {

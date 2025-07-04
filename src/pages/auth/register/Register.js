@@ -1,10 +1,14 @@
 
-import Input from '../../../components/input/Input';
-import Button from '../../../components/button/Button';
-import './Register.scss';
+import Input from '@components/input/Input';
+import Button from '@components/button/Button';
+import '@pages/auth/register/Register.scss';
 import { useState, useEffect } from 'react';
-import { Utils } from '../../../services/utils/utils.service';
-import { authService } from '../../../services/api/auth/auth.service';
+import { Utils } from '@services/utils/utils.service';
+import { authService } from '@services/api/auth/auth.service';
+import { useNavigate } from 'react-router-dom';
+import useLocalStorage from '@hooks/useLocalStorage';
+import useSessionStorage from '@hooks/useSessionStorage';
+import { useDispatch } from 'react-redux';
 
 const Register = () => {
 
@@ -16,6 +20,11 @@ const Register = () => {
   const [alertType, setAlertType] = useState('');
   const [hasError, setHasError] = useState(false);
   const [user, setUser] = useState();
+  const [setStoredUsername] = useLocalStorage('username', 'set');
+  const [setLoggedIn] = useLocalStorage('keepLoggedIn', 'set');
+  const [pageReload] = useSessionStorage('pageReload', 'set');
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const registerUser = async (event) => {
     setLoading(true);
@@ -33,12 +42,15 @@ const Register = () => {
       console.log(result);
 
       // 1 - set logged in to true in local storage
+      setLoggedIn(true);
       // 2 - set username in local storage
+      setStoredUsername(username);
       // 3 - dispatch user to redux
       setLoading(false);
-      setUser(result.data.user);
+      // setUser(result.data.user);
       setHasError(false);
       setAlertType('alert-success');
+      Utils.dispatchUser(result, pageReload, dispatch, setUser);
     } catch (error) {
       setLoading(false);
       setHasError(true);
@@ -51,10 +63,11 @@ const Register = () => {
     if (loading && !user) return;
     if (user) {
       // navigate to first page
-      console.log('navigate to streams page');
-      setLoading(false);
+      navigate('/app/social/streams');
+      // console.log('navigate to streams page');
+      // setLoading(false);
     }
-  }, [loading, user]);
+  }, [loading, user, navigate]);
 
   return (
     <div className="auth-inner">
