@@ -1,0 +1,14 @@
+.dashboard {
+  display: flex;
+
+  &-sidebar {
+    flex: 2;
+    max-width: 20%;
+  }
+
+  &-content {
+    flex: 6;
+    height: 100vh;
+    // background-color: blue;
+  }
+}

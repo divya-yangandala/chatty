@@ -18,6 +18,8 @@ const useDetectOutsideClick = (ref, initialState) => {
       window.removeEventListener('mousedown', onClick);
     }
   }, [isActive, ref]);
+
+  return [isActive, setIsActive]
 }
 
 export default useDetectOutsideClick;
