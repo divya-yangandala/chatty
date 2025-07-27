@@ -98,7 +98,7 @@ const Login = () => {
           />
           <label className="checkmark-container" htmlFor="checkbox">
             {/* <input id="checkbox" type="checkbox" name="checkbox" /> */}
-            <Input id="checkbox" type="checkbox" name="checkbox" value={false} handleChange={() => setKeepLoggedIn(!keepLoggedIn)}/>
+            <Input id="checkbox" type="checkbox" name="checkbox" value={keepLoggedIn} handleChange={() => setKeepLoggedIn(!keepLoggedIn)}/>
             Keep me signed in
           </label>
         </div>
