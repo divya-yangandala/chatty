@@ -52,11 +52,11 @@ const Toast = (props) => {
           style={{ backgroundColor: toast.backgroundColor }}
         >
           <button className="cancel-button" onClick={() => deleteToast()}>X</button>
-          <div className={`toast-notification-image ${toast.description.length <= 73 ? 'toast-icon' : ''}`}>
-            <img src={toast.icon} alt="" />
+          <div className={`toast-notification-image ${toast?.description?.length <= 73 ? 'toast-icon' : ''}`}>
+            <img src={toast?.icon} alt="" />
           </div>
-          <div className={`toast-notification-message ${toast.description.length <= 73 ? 'toast-message' : ''}`}>
-            {toast.description}
+          <div className={`toast-notification-message ${toast?.description?.length <= 73 ? 'toast-message' : ''}`}>
+            {toast?.description}
           </div>
         </div>
       ))}
@@ -71,4 +71,4 @@ Toast.propTypes = {
   autoDeleteTime: PropTypes.number
 }
 
-export default Toast
+export default Toast;
