@@ -2,6 +2,7 @@ import { floor, random } from 'lodash';
 import { avatarColors } from '@services/utils/static.data';
 import { addUser, clearUser } from '@redux/reducers/user/user.reducer';
 import { addNotification, clearNotification } from '@redux/reducers/notifications/notifications.reducer';
+import { some } from 'lodash';
 
 export class Utils {
   static avatarColor () {
@@ -76,5 +77,31 @@ export class Utils {
       id = id.replace(/['"]+/g, '');
     }
     return `https://res.cloudinary.com/dnzbnwqfd/image/upload/v${version}/${id}`;
+  }
+
+  static generateString(length) {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcedfghikjlmnopqrstuvwxyz0123456789';
+    let result = '';
+    const charactersLength = characters.length;
+    for (let i = 0; i < length; i++) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+  }
+
+  static checkIfUserIsBlocked(blocked, userId) {
+    return some(blocked, (id) => id === userId);
+  }
+
+  static checkIfUserIsFollowed(userFollowers, postCreatorId, userId) {
+    return some(userFollowers, (user) => user._id === postCreatorId || postCreatorId === userId);
+  }
+
+  static checkPrivacy(post, profile, following) {
+    const isPrivate = post?.privacy === 'Private' || post?.userId === profile._id;
+    const isPublic = post?.privacy === 'Public';
+    const isFollower =
+      post.privacy === 'Followers' && Utils.checkIfUserIsFollowed(following, post?.userId, profile?._id);
+    return isPrivate || isPublic || isFollower;
   }
 }
