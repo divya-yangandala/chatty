@@ -3,6 +3,7 @@ import { avatarColors } from '@services/utils/static.data';
 import { addUser, clearUser } from '@redux/reducers/user/user.reducer';
 import { addNotification, clearNotification } from '@redux/reducers/notifications/notifications.reducer';
 import { some } from 'lodash';
+import millify from 'millify';
 
 export class Utils {
   static avatarColor () {
@@ -32,7 +33,9 @@ export class Utils {
   static dispatchUser (result, pageReload, dispatch, setUser) {
     pageReload(true);
     dispatch(addUser({ token: result.data.token, profile: result.data.user }));
+    console.log("here1");
     setUser(result.data.user);
+    console.log("here2");
   }
 
   static clearStore ({ dispatch, deleteStorageUsername, deleteSessionPageReload, setLoggedIn }) {
@@ -103,5 +106,36 @@ export class Utils {
     const isFollower =
       post.privacy === 'Followers' && Utils.checkIfUserIsFollowed(following, post?.userId, profile?._id);
     return isPrivate || isPublic || isFollower;
+  }
+
+  static firstLetterUpperCase(word) {
+    if (!word) return '';
+    else return `${word.charAt(0).toUpperCase()}${word.slice(1)}`;
+  }
+
+  static formattedReactions(reactions) {
+    const postReactions = [];
+    for (const[key, value] of Object.entries(reactions)) {
+      if (value > 0) {
+        const reactionObject = {
+          type: key,
+          value
+        };
+        postReactions.push(reactionObject);
+      }
+    }
+    return postReactions;
+  }
+
+  static shortenLargeNumbers(data) {
+    if (data === undefined) {
+      return 0;
+    } else {
+      return millify(data);
+    }
+  }
+
+  static getImage(imageId, imageVersion) {
+    return imageId && imageVersion ? this.appImageUrl(imageVersion, imageId) :  '';
   }
 }

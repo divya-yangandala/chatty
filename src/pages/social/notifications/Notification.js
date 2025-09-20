@@ -7,7 +7,7 @@ import { Utils } from '@services/utils/utils.service';
 import { useDispatch, useSelector } from 'react-redux';
 import useEffectOnce from '@hooks/useEffectOnce';
 import { NotificationUtils } from '@services/utils/notification-utils.service';
-import NotificationPreview from '@components/dailog/NotificationPreview';
+import NotificationPreview from '@components/dialog/NotificationPreview';
 
 
 export const Notification = () => {

@@ -8,10 +8,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { openModal, toggleFeelingModal, toggleGifModal, toggleImageModal } from '@redux/reducers/modal/modal.reducer';
 import AddPost from '@components/posts/post-modal/post-add/AddPost';
 import { useRef, useState } from 'react';
+import EditPost from '@components/posts/post-modal/post-edit/EditPost';
 
 const PostForm = () => {
   const { profile } = useSelector((state) => state.user);
-  const { type, isOpen, openFileDialog, gifModalIsOpen, feelingIsOpen } = useSelector((state) => state.modal);
+  const { type, isOpen, openFileDialog, gifModalIsOpen, feelingsIsOpen } = useSelector((state) => state.modal);
   const [selectedPostImage, setSelectedPostImage] = useState();
   const dispatch = useDispatch();
   const fileInputRef = useRef();
@@ -33,7 +34,7 @@ const PostForm = () => {
 
   const openFeelingComponent = () => {
     dispatch(openModal({ type: 'add' }));
-    dispatch(toggleFeelingModal(!feelingIsOpen));
+    dispatch(toggleFeelingModal(!feelingsIsOpen));
   }
 
   const fileInputClicked = () => {
@@ -90,6 +91,7 @@ const PostForm = () => {
         </div>
       </div>
       {isOpen && type === 'add' && <AddPost selectedImage={selectedPostImage}/>}
+      {isOpen && type === 'edit' && <EditPost />}
     </>
   );
 };

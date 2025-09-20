@@ -18,7 +18,7 @@ import { userService } from '@services/api/user/user.service';
 import HeaderSkeleton from './HeaderSkeleton';
 import { notificationService } from '@services/api/notifications/notification.service';
 import { NotificationUtils } from '@services/utils/notification-utils.service';
-import NotificationPreview from '@components/dailog/NotificationPreview';
+import NotificationPreview from '@components/dialog/NotificationPreview';
 import { socketService } from '@services/socket/socket.service';
 
 const Header = () => {
