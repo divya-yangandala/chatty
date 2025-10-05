@@ -100,6 +100,10 @@ export class Utils {
     return some(userFollowers, (user) => user._id === postCreatorId || postCreatorId === userId);
   }
 
+  static checkIfUserIsOnline(username, onlineUsers) {
+    return some(onlineUsers, (user) => user === username?.toLowerCase() )
+  }
+
   static checkPrivacy(post, profile, following) {
     const isPrivate = post?.privacy === 'Private' || post?.userId === profile._id;
     const isPublic = post?.privacy === 'Public';

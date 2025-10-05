@@ -16,6 +16,11 @@ class UserService {
     const response = await axios.get('/currentuser');
     return response;
   }
+
+  async getAllUsers(page) {
+    const response = await axios.get(`/user/all/${page}`);
+    return response;
+  }
 }
 
 // we'll add these users data from the API to redux store and from redux we'll fetch the Users suggestions
