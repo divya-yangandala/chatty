@@ -1,4 +1,4 @@
-import { floor, random } from 'lodash';
+import { findIndex, floor, random } from 'lodash';
 import { avatarColors } from '@services/utils/static.data';
 import { addUser, clearUser } from '@redux/reducers/user/user.reducer';
 import { addNotification, clearNotification } from '@redux/reducers/notifications/notifications.reducer';
@@ -141,5 +141,11 @@ export class Utils {
 
   static getImage(imageId, imageVersion) {
     return imageId && imageVersion ? this.appImageUrl(imageVersion, imageId) :  '';
+  }
+
+  static removeUserFromList(list, userId) {
+    const index = findIndex(list, (id) => id === userId);
+    list.splice(index, 1);
+    return list;
   }
 }

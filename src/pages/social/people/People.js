@@ -5,17 +5,21 @@ import useInfiniteScroll from '@hooks/useInfiniteScroll';
 import '@pages/social/people/People.scss';
 import { userService } from '@services/api/user/user.service';
 import { Utils } from '@services/utils/utils.service';
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useRef, useState, useEffect } from 'react';
 import { FaCircle } from 'react-icons/fa';
 import { uniqBy } from 'lodash';
 import useEffectOnce from '@hooks/useEffectOnce';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { ProfileUtils } from '@services/utils/profile-utils.service';
 import { useNavigate } from 'react-router-dom';
+import { FollowersUtils } from '@services/utils/followers-utils.service';
+import { socketService } from '@services/socket/socket.service';
+import { followerService } from '@services/api/followers/follower.service';
 
 const People = () => {
-
+  const { profile } = useSelector((state) => state.user);
   const [users, setUsers] = useState([]);
+  const [following, setFollowing] = useState([]);
   const [onlineUsers, setOnlineUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
@@ -40,7 +44,7 @@ const People = () => {
   const getAllUsers = useCallback(async () => {
     try {
       const response = await userService.getAllUsers(currentPage);
-      if (response.data.users.length) {
+      if (response.data.users.length > 0) {
         setUsers((data) => {
           const result = [...data, ...response.data.users];
           const allUsers = uniqBy(result, '_id');
@@ -55,19 +59,52 @@ const People = () => {
     }
   }, [currentPage, dispatch]);
 
+  const getUserFollowing = async () => {
+    try {
+      const response = await followerService.getUserFollowing();
+      setFollowing(response.data.following);
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      Utils.dispatchNotification(error.response.data.message, 'error', dispatch);
+    }
+  }
 
+  const followUser = async (user) => {
+    try {
+      FollowersUtils.followUser(user, dispatch)
+    } catch (error) {
+      Utils.dispatchNotification(error.response.data.message, 'error', dispatch);
+    }
+  };
+  const unfollowUser = async(user) => {
+    try {
+      const userData = user;
+      // user = cloneDeep(user); //another way of doing it
+      userData.followersCount -= 1;
+      socketService?.socket?.emit('unfollow user', userData);
+      FollowersUtils.unfollowUser(user, profile, dispatch);
+    } catch (error) {
+      Utils.dispatchNotification(error.response.data.message, 'error', dispatch);
+    }
+  }
 
   useEffectOnce(() => {
     getAllUsers();
-  })
+    getUserFollowing();
+  });
+
+  useEffect(() => {
+    FollowersUtils.socketIOFollowAndUnfollow(users, following, setFollowing, setUsers);
+  }, [following, users]);
 
   return (
     <div className="card-container" ref={bodyRef}>
-      <div className="people">People </div>
+      <div className="people">People</div>
       {users.length > 0 && (
         <div className="card-element">
-          {users.map((data, index) => (
-            <div className="card-element-item" key={index} data-testid="card-element-item">
+          {users.map((data) => (
+            <div className="card-element-item" key={data?._id} data-testid="card-element-item">
               {Utils.checkIfUserIsOnline(data?.username, onlineUsers) && (
                 <div className="card-element-item-indicator">
                   <FaCircle className="online-indicator" />
@@ -92,11 +129,11 @@ const People = () => {
                 followingCount={data?.followingCount}
               />
               <CardElementButton
-                isChecked={Utils.checkIfUserIsFollowed([], data?._id)}
+                isChecked={Utils.checkIfUserIsFollowed(following, data?._id)}
                 btnTextOne="Follow"
                 btnTextTwo="Unfollow"
                 onClickBtnOne={() => followUser(data)}
-                onClickBtnTwo={() => unFollowUser(data)}
+                onClickBtnTwo={() => unfollowUser(data)}
                 onNavigateToProfile={() => ProfileUtils.navigateToProfile(data, navigate)}
               />
             </div>

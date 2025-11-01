@@ -23,14 +23,15 @@ const Posts = ({ allPosts, userFollowing, postsLoading }) => {
       {!loading &&
         posts.length > 0 &&
         posts.map((post) => (
-        <div key={Utils.generateString(10)} data-testid="posts-item">
-          {(Utils.checkIfUserIsFollowed(profile?.blockedBy, post?.userId) || post?.userId === profile?._id) &&
+        // <div key={Utils.generateString(10)} data-testid="posts-item">
+        <div key={post?._id} data-testid="posts-item">
+          {(!Utils.checkIfUserIsBlocked(profile?.blockedBy, post?.userId) || post?.userId === profile?._id) &&
             (
               <>
                 {Utils.checkPrivacy(post, profile, following) && (
                   <>
                     {/* <Post post={post} showIcons={false} loading={loading} /> */}
-                    <Post post={post} showIcons={true} />
+                    <Post post={post} showIcons={false} />
                   </>
                 )}
               </>
@@ -42,9 +43,7 @@ const Posts = ({ allPosts, userFollowing, postsLoading }) => {
       {!loading && !posts.length &&
         [1, 2, 3, 4, 5, 6].map((index) => (
           <div key={index}>
-            <div key={index}>
-              <PostSkeleton />
-            </div>
+            <PostSkeleton />
           </div>
         ))
       }

@@ -87,8 +87,8 @@ export const Notification = () => {
       <p>Notifications count: {notifications?.length}</p>
       {!loading && notifications.length > 0 && (
         <div className="notifications-box">
-          {notifications.map((notification, index) => (
-            <div className="notification-box" data-testid="notification-box" key={index}
+          {notifications.map((notification) => (
+            <div className="notification-box" data-testid="notification-box" key={notification?._id}
               onClick={() => markAsRead(notification)}
             >
               <div className="notification-box-sub-card">
