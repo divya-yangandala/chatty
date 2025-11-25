@@ -46,7 +46,7 @@ const Input = forwardRef((props, ref) => {
       onClick={props.onClick}
       onFocus={props.onFocus}
       onBlur={props.onBlur}
-      placeholder={props.placeHolder}
+      placeholder={props.placeholder}
       className={`form-input ${props.className}`}
       style={props.style}
       autoComplete='false'
@@ -63,7 +63,7 @@ Input.propTypes = {
   labelText: PropTypes.string,
   value: PropTypes.string,
   className: PropTypes.string,
-  placeHolder: PropTypes.string,
+  placeholder: PropTypes.string,
   handleChange: PropTypes.func,
   onClick: PropTypes.func,
   onFocus: PropTypes.func,

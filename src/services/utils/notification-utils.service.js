@@ -2,6 +2,7 @@ import { notificationService } from '@services/api/notifications/notification.se
 import { socketService } from '@services/socket/socket.service';
 import { cloneDeep, findIndex, find, remove, sumBy } from 'lodash';
 import { timeAgo } from '@services/utils/timeago.utils';
+import { Utils } from './utils.service';
 
 export class NotificationUtils {
   // notification utils function that will handle the insert notification event,update notification and delete notification.
@@ -108,5 +109,53 @@ export class NotificationUtils {
       setNotificationDialogContent(notificationDialog);
     }
     await notificationService.markNotificationAsRead(notificationId);
+  }
+
+  static socketIOMessageNotification(
+    profile,
+    messageNotifications,
+    setMessageNotifications,
+    setMessageCount,
+    dispatch,
+    location
+  ) {
+     socketService?.socket.on('chat list', (data) => {
+      messageNotifications = cloneDeep(messageNotifications);
+      if (data?.receiverUsername === profile?.username) {
+        const notificationData = {
+          senderId: data.senderId,
+          senderUsername: data.senderUsername,
+          senderAvatarColor: data.senderAvatarColor,
+          senderProfilePicture: data.senderProfilePicture,
+          receiverId: data.receiverId,
+          receiverUsername: data.receiverUsername,
+          receiverAvatarColor: data.receiverAvatarColor,
+          receiverProfilePicture: data.receiverProfilePicture,
+          messageId: data._id,
+          conversationId: data.conversationId,
+          body: data.body,
+          isRead: data.isRead
+        }
+        const messageIndex = findIndex(
+          messageNotifications,
+          (notification) => notification.conversationId === data.conversationId
+        )
+        if (messageIndex > -1) {
+          remove(messageNotifications, (notification) => notification.conversationId === data.conversationId);
+          messageNotifications = [notificationData, ...messageNotifications];
+        } else {
+          messageNotifications = [notificationData, ...messageNotifications];
+        }
+        const count = sumBy(messageNotifications, (notification) => {
+          return !notification.isRead ? 1 : 0;
+        });
+
+        if (!Utils.checkUrl(location.pathname, 'chat')) {
+          Utils.dispatchNotification('You have a new message', 'success', dispatch);
+        }
+        setMessageCount(count);
+        setMessageNotifications(messageNotifications);
+      }
+     })
   }
 }
