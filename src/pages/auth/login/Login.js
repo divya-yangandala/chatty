@@ -45,7 +45,6 @@ const Login = () => {
       setHasError(false);
       setAlertType('alert-success');
     } catch (error) {
-      console.log(66666, error);
       setLoading(false);
       setHasError(true);
       setAlertType('alert-error');
@@ -79,7 +78,7 @@ const Login = () => {
             type="text"
             value={username}
             labelText="Username"
-            placeHolder="Enter Username"
+            placeholder="Enter Username"
             style={{ border: `${hasError ? '1px solid #fa9b8a' : ''}` }}
             // className={hasError ? '1px solid #fa9b8a' : ''}
             handleChange={(event) => setUsername(event.target.value)}
@@ -92,7 +91,7 @@ const Login = () => {
             type="password"
             value={password}
             labelText="Password"
-            placeHolder="Enter Password"
+            placeholder="Enter Password"
             style={{ border: `${hasError ? '1px solid #fa9b8a' : ''}` }}
             handleChange={(event) => setPassword(event.target.value)}
           />

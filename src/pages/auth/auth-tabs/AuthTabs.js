@@ -6,7 +6,7 @@ import { Login, Register } from '@pages/auth/index.js';
 import useLocalStorage from '@hooks/useLocalStorage';
 import { useNavigate } from 'react-router-dom';
 import { Utils } from '@services/utils/utils.service';
-
+import PageLoader from '@components/page-loader/PageLoader';
 
 const AuthTabs = () => {
   const [type, setType] = useState('Sign In');
@@ -18,48 +18,50 @@ const AuthTabs = () => {
     const env = Utils.appEnvironment();
     setEnvironment(env);
     if (keepLoggedIn) navigate('/app/social/streams');
-  }, [keepLoggedIn, navigate])
+  }, [keepLoggedIn, navigate]);
 
   return (
     <>
-      <div className="container-wrapper" style={{ backgroundImage: `url(${backgroundImage})` }}>
-        <div className="environment">{environment}</div>
-        <div className="container-wrapper-auth">
-          <div className="tabs">
-            <div className="tabs-auth">
-              <ul className="tab-group">
-                <li className={`tab ${type === 'Sign In' ? 'active' : ''}`} onClick={() => setType('Sign In')}>
-                  <button className="login">Sign In</button>
-                </li>
-                <li className={`tab ${type === 'Sign Up' ? 'active' : ''}`} onClick={() => setType('Sign Up')}>
-                  <button className="signup">Sign Up</button>
-                </li>
-              </ul>
-              { type === 'Sign In' &&
-                <div className="tab-item">
-                  {/* login component */}
-                  <Login />
-                </div>
-              }
-              { type === 'Sign Up' &&
-                <div className="tab-item">
-                  <Register />
-                </div>
-              }
-              {/* <div className="tab-item">
+      {keepLoggedIn ? (
+        <PageLoader />
+      ) : (
+        <div className="container-wrapper" style={{ backgroundImage: `url(${backgroundImage})` }}>
+          <div className="environment">{environment}</div>
+          <div className="container-wrapper-auth">
+            <div className="tabs">
+              <div className="tabs-auth">
+                <ul className="tab-group">
+                  <li className={`tab ${type === 'Sign In' ? 'active' : ''}`} onClick={() => setType('Sign In')}>
+                    <button className="login">Sign In</button>
+                  </li>
+                  <li className={`tab ${type === 'Sign Up' ? 'active' : ''}`} onClick={() => setType('Sign Up')}>
+                    <button className="signup">Sign Up</button>
+                  </li>
+                </ul>
+                {type === 'Sign In' && (
+                  <div className="tab-item">
+                    {/* login component */}
+                    <Login />
+                  </div>
+                )}
+                {type === 'Sign Up' && (
+                  <div className="tab-item">
+                    <Register />
+                  </div>
+                )}
+                {/* <div className="tab-item">
                 login component
               </div>
               <div className="tab-item">
                 register component
               </div> */}
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
     </>
-
-
-  )
-}
+  );
+};
 
 export default AuthTabs;

@@ -5,8 +5,11 @@ class SocketService {
 
   setupSocketConnection () {
     this.socket = io(process.env.REACT_APP_BASE_ENDPOINT, {
-      transports: ['websocket'],
-      secure: true
+      transports: ['polling', 'websocket'],
+      secure: true,
+      upgrade: true,
+      reconnection: true,
+      timeout: 20000,
     });
     this.socketConnectionEvents();
   }

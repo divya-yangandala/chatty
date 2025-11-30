@@ -26,7 +26,6 @@ export class ChatUtils {
 
   // this object is what we are going to send to the back end
   static joinRoomEvent(user, profile) {
-    console.log("user, profile:  ", user, profile);
     const users = {
       receiverId: user.receiverId,
       receiverName: user.receiverUsername,

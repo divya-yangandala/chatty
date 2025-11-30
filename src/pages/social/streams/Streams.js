@@ -68,7 +68,6 @@ const Streams = () => {
 
   const getReactionsByUsername = async() => {
     try {
-      console.log("storedUsername:  ", storedUsername);
       const response = await postService.getReactionsByUsername(storedUsername);
       dispatch(addReactions(response.data.reactions));
     } catch (error) {

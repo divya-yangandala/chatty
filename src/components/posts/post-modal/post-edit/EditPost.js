@@ -44,7 +44,6 @@ const EditPost = () => {
   const maxNumberOfCharacters = 100;
 
   const selectBackground = (bgColor) => {
-    console.log(selectedPostImage);
     PostUtils.selectBackground(bgColor, postData, setTextareaBackground, setPostData);
   }
 
@@ -140,7 +139,6 @@ const EditPost = () => {
         updateUserPost();
       }
     } catch (error) {
-      console.log(error);
       PostUtils.dispatchNotification(
         error.response?.data?.message,
         'error',
@@ -174,7 +172,6 @@ const EditPost = () => {
   }
 
   useEffect(() => {
-    console.log(post);
     PostUtils.positionCursor('editable');
   }, [post]);
 

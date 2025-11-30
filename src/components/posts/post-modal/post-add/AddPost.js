@@ -42,8 +42,6 @@ const AddPost = ({ selectedImage }) => {
   const maxNumberOfCharacters = 100;
 
   const selectBackground = (bgColor) => {
-    console.log(selectedPostImage);
-    console.log(selectedImage);
     PostUtils.selectBackground(bgColor, postData, setTextareaBackground, setPostData);
   }
 

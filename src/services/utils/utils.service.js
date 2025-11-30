@@ -33,9 +33,7 @@ export class Utils {
   static dispatchUser (result, pageReload, dispatch, setUser) {
     pageReload(true);
     dispatch(addUser({ token: result.data.token, profile: result.data.user }));
-    console.log("here1");
     setUser(result.data.user);
-    console.log("here2");
   }
 
   static clearStore ({ dispatch, deleteStorageUsername, deleteSessionPageReload, setLoggedIn }) {

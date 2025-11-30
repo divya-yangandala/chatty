@@ -33,11 +33,30 @@ class UserService {
   }
 
   async getUserProfileByUsername(username, userId, uId) {
-    console.log("here1")
     const response = await axios.get(`/user/profile/posts/${username}/${userId}/${uId}`);
-    console.log("here2")
     return response;
   }
+
+  async changePassword(body) {
+    const response = await axios.put('/user/profile/change-password', body);
+    return response;
+  }
+
+  async updateNotificationSettings(settings) {
+    const response = await axios.put('/user/profile/settings', settings);
+    return response;
+  }
+
+  async updateBasicInfo(info) {
+    const response = await axios.put('/user/profile/basic-info', info);
+    return response;
+  }
+
+  async updateSocialLinks(info) {
+    const response = await axios.put('/user/profile/social-links', info);
+    return response;
+  }
+
 }
 
 // we'll add these users data from the API to redux store and from redux we'll fetch the Users suggestions

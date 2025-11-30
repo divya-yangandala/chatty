@@ -3,7 +3,6 @@ import axios from '@services/axios';
 class AuthService {
   async signUp (body) {
     const response = await axios.post('/signup', body);
-    console.log('body  ', body);
     return response;
   }
 

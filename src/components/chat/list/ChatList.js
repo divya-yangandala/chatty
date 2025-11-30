@@ -78,7 +78,7 @@ export const ChatList = () => {
   }, [chatList, chatMessageList, dispatch, searchParams, profile]);
 
   const removeSelectedUserFromList = (event) => {
-    event.stopPropogation();
+    event.stopPropagation();
     chatMessageList = cloneDeep(chatMessageList);
     const userIndex = findIndex(chatMessageList, ['receiverId', searchParams.get('id')]);
     if (userIndex > -1) {

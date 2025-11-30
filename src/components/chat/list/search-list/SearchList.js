@@ -25,7 +25,7 @@ const SearchList = ({
     setIsSearching(false);
     setSearchResult([]);
   }
-  // console.log("result:    ", result);
+  
   return (
     <div className="search-result">
       <div className="search-result-container">

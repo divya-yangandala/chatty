@@ -38,7 +38,6 @@ const Register = () => {
         avatarColor,
         avatarImage
       });
-      console.log(result);
 
       // 1 - set logged in to true in local storage
       setLoggedIn(true);
@@ -84,7 +83,7 @@ const Register = () => {
             type="text"
             value={username}
             labelText="Username"
-            placeHolder="Enter Username"
+            placeholder="Enter Username"
             style={{ border: `${hasError ? '1px solid #fa9b8a' : ''}` }}
             handleChange={(event) => setUsername(event.target.value)}
           />
@@ -95,7 +94,7 @@ const Register = () => {
             type="text"
             value={email}
             labelText="Email"
-            placeHolder="Enter Email"
+            placeholder="Enter Email"
             style={{ border: `${hasError ? '1px solid #fa9b8a' : ''}` }}
             handleChange={(event) => setEmail(event.target.value)}
           />
@@ -107,7 +106,7 @@ const Register = () => {
             type="password"
             value={password}
             labelText="Password"
-            placeHolder="Enter Password"
+            placeholder="Enter Password"
             style={{ border: `${hasError ? '1px solid #fa9b8a' : ''}` }}
             handleChange={(event) => setPassword(event.target.value)}
           />

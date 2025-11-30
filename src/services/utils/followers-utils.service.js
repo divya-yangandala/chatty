@@ -28,7 +28,6 @@ export class FollowersUtils {
   }
 
   static socketIOFollowAndUnfollow(users, followers = [], setFollowers, setUsers) {
-    console.log("followers   ", followers);
     socketService?.socket?.on('add follower', (data) => {
       const userData = find(users, (user) => user._id === data?._id);
       if (userData) {

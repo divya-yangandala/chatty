@@ -116,7 +116,6 @@ const Header = () => {
       await userService.logoutUser();
       navigate('/'); // this is index page i.e. AuthTabs
     } catch (error) {
-      // console.log(error);
       Utils.dispatchNotification(error.response.data.message, 'error', dispatch);
     }
   }
